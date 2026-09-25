@@ -297,7 +297,7 @@ def main(page: ft.Page):
 
         page.show_dialog(
             ft.SnackBar(
-                content=ft.Text("Application submitted successfully!"),
+                content=ft.Text(f"Application accepted for {clean_name}!"),
                 bgcolor=ft.Colors.GREEN_700,
                 behavior=ft.SnackBarBehavior.FLOATING
             )
@@ -311,7 +311,7 @@ def main(page: ft.Page):
         gwa_field.value = ""
         program_dropdown.value = None
 
-        status_summary.value = f"Approved applicants: {len(approved_applicants)}"
+        status_summary.value = f"Total approved applicants: {len(approved_applicants)}"
 
         page.update()
 

@@ -216,9 +216,28 @@ def main(page: ft.Page):
     )
 
     status_summary = ft.Text(
-        value="Ready to accept applications.",
+        value="Applications registered this session: 0",
         color=ft.Colors.GREY_400,
         size=13
+    )
+
+    recent_contracts = ft.Column(
+        spacing=8
+    )
+
+    recent_contracts_title = ft.Row(
+        controls=[
+            ft.Icon(
+                ft.Icons.HISTORY,
+                size=18
+            ),
+            ft.Text(
+            "Recent Session Intake Contracts (In-Memory Pre-Persistence)",
+            weight=ft.FontWeight.BOLD,
+                size=14
+            )
+        ],
+        spacing=6
     )
 
     # ------------------------------------------------------------------------
@@ -321,6 +340,51 @@ def main(page: ft.Page):
 
         approved_applicants.append(applicant)
 
+        recent_contracts.controls.append(
+            ft.Container(
+                padding=12,
+                bgcolor="#2D2D2D",
+                border=ft.Border.all(1, ft.Colors.GREY_300),
+                border_radius=8,
+                content=ft.Row(
+                    controls=[
+                        ft.Column(
+                            controls=[
+                                ft.Row(
+                                    controls=[
+                                        ft.Icon(
+                                            ft.Icons.VERIFIED,
+                                            size=18,
+                                            color=ft.Colors.GREEN_400
+                                        ),
+                                        ft.Text(
+                                            f"{applicant.full_name} ({applicant.student_id})",
+                                            weight=ft.FontWeight.BOLD,
+                                            size=13
+                                        ),
+                                    ],
+                                    spacing=4
+                                ),
+                                ft.Text(
+                                    f"{applicant.program} • GWA: {applicant.gwa:.2f} • {applicant.email}",
+                                    size=12,
+                                    color=ft.Colors.GREY_400
+                                )
+                            ],
+                            spacing=4,
+                            expand=True,
+                        ),
+                        ft.Text(
+                            applicant.submitted_at.strftime("%H:%M:%S"),
+                            size=10,
+                            color=ft.Colors.GREY_500
+                        )
+                    ],
+                    vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                )
+            )
+        )
+
         page.show_dialog(
             ft.SnackBar(
                 content=ft.Text(f"Application accepted for {clean_name}!"),
@@ -337,7 +401,7 @@ def main(page: ft.Page):
         gwa_field.value = ""
         program_dropdown.value = None
 
-        status_summary.value = f"Total approved applicants: {len(approved_applicants)}"
+        status_summary.value = f"Applications registered this session: {len(approved_applicants)}"
 
         page.update()
 
@@ -383,7 +447,9 @@ def main(page: ft.Page):
                 ft.Container(height=10),
                 submit_button,
                 ft.Container(height=5),
-                status_summary
+                status_summary,
+                recent_contracts_title,
+                recent_contracts
             ],
             spacing=14,
             scroll=ft.ScrollMode.AUTO
